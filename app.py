@@ -94,10 +94,11 @@ def tobs():
     
     return jsonify(histo_list)
     
-@app.route("/api/v1.0/start")
-def start():
+@app.route("/api/v1.0/<start>")
+def start(start):
+    print(start)
     newer_list=[]
-    for measure in session.query(measurement).filter(measurement.station=="USC00519281"):
+    for measure in session.query(measurement).filter(measurement.station=="USC00519281").filter(measurement.date=start):
         newer_list.append(measure.tobs)
 
     mean = np.mean(newer_list)
@@ -106,7 +107,11 @@ def start():
 
 
 
-#@app.route("/api/v1.0/start/end")
+@app.route("/api/v1.0/<start>/<end>")
+def startend(start,end):
+    startend_list=[]
+    for measure in session.query(measurement).filter(measurement.station=="USC00519281").filter(measurement.date>=start).filter(measurement.date=<end):
+        startend_list.append(measure.tobs)
 
    
 if __name__ == "__main__":
